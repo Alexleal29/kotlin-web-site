@@ -36,12 +36,19 @@ plugins {
 `kotlin` is the top-level block for multiplatform project configuration in the Gradle build script.
 Inside `kotlin`, you can write the following blocks:
 
-| **Block**        | **Description**                                                                                                          |
-|------------------|--------------------------------------------------------------------------------------------------------------------------|
-| _\<targetName\>_ | Declares a particular target of a project. The names of available targets are listed in the [Targets](#targets) section. |
-| `targets`        | All targets of the project.                                                                                              |
-| `presets`        | All predefined targets. Use this for [configuring multiple predefined targets](#targets) at once.                        |
-| `sourceSets`     | Configures predefined and declares custom [source sets](#source-sets) of the project.                                    |
+| **Block**         | **Description**                                                                                                                         |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| _\<targetName\>_  | Declares a particular target of a project. The names of available targets are listed in the [Targets](#targets) section.                |
+| `targets`         | All targets of the project.                                                                                                             |
+| `presets`         | All predefined targets. Use this for [configuring multiple predefined targets](#targets) at once.                                       |
+| `sourceSets`      | Configures predefined and declares custom [source sets](#source-sets) of the project.                                                   |
+| `compilerOptions` | Extension-level common [compiler options](gradle-compiler-options.md) that are used as defaults for all targets and shared source sets. |
+
+> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained).
+> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it 
+> in [YouTrack](https://kotl.in/issue).
+>
+{type="warning"}
 
 ## Targets
 
@@ -118,13 +125,20 @@ Each target can have one or more [compilations](#compilations).
 
 In any target block, you can use the following declarations:
 
-| **Name**            | **Description**                                                                                                                                   | 
-|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `attributes`        | Attributes used for [disambiguating targets](multiplatform-set-up-targets.md#distinguish-several-targets-for-one-platform) for a single platform. |
-| `preset`            | The preset that the target has been created from, if any.                                                                                         |
-| `platformType`      | Designates the Kotlin platform of this target. Available values: `jvm`, `androidJvm`, `js`, `native`, `common`.                                   |
-| `artifactsTaskName` | The name of the task that builds the resulting artifacts of this target.                                                                          |
-| `components`        | The components used to setup Gradle publications.                                                                                                 |
+| **Name**            | **Description**                                                                                                                                                                                      | 
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `attributes`        | Attributes used for [disambiguating targets](multiplatform-set-up-targets.md#distinguish-several-targets-for-one-platform) for a single platform.                                                    |
+| `preset`            | The preset that the target has been created from, if any.                                                                                                                                            |
+| `platformType`      | Designates the Kotlin platform of this target. Available values: `jvm`, `androidJvm`, `js`, `native`, `common`.                                                                                      |
+| `artifactsTaskName` | The name of the task that builds the resulting artifacts of this target.                                                                                                                             |
+| `components`        | The components used to setup Gradle publications.                                                                                                                                                    |
+| `compilerOptions`   | The [compiler options](gradle-compiler-options.md) used for the target. This declaration overrides any `compilerOptions` configured at [top level](multiplatform-dsl-reference.md#top-level-blocks). |
+
+> The support for `compilerOptions` as a common target configuration is [Experimental](components-stability.md#stability-levels-explained).
+> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
+> in [YouTrack](https://kotl.in/issue).
+>
+{type="warning"}
 
 ### JVM targets
 
@@ -716,8 +730,18 @@ kotlin {
             }
         }
     }
+    //Alternatively:
+    //compilerOptions {
+        //allWarningsAsErrors.set(true)
+    //}
 }
 ```
+
+> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained).
+> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
+> in [YouTrack](https://kotl.in/issue).
+>
+{type="warning"}
 
 </tab>
 <tab title="Groovy" group-key="groovy">

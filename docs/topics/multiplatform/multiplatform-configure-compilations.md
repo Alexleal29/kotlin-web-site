@@ -36,6 +36,22 @@ kotlin {
 }
 ```
 
+Alternatively, you can use the `compilerOptions` [top-level block](multiplatform-dsl-reference.md#top-level-blocks):
+
+```kotlin
+kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
+}
+```
+
+> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained).
+> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
+> in [YouTrack](https://kotl.in/issue).
+>
+{type="warning"}
+
 ## Configure compilations for one target
 
 <tabs group="build-script">
@@ -66,6 +82,44 @@ kotlin {
 
 </tab>
 </tabs>
+
+Alternatively, you can use the `compilerOptions` block at target level:
+
+<tabs group="build-script">
+<tab title="Kotlin" group-key="kotlin">
+
+```kotlin
+kotlin {
+    jvm {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
+    }
+}
+```
+
+</tab>
+<tab title="Groovy" group-key="groovy">
+
+```groovy
+kotlin {
+    jvm {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
+    }
+}
+```
+
+</tab>
+</tabs>
+
+> The support for the `compilerOptions` block at target level is [Experimental](components-stability.md#stability-levels-explained).
+> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
+> in [YouTrack](https://kotl.in/issue).
+>
+{type="warning"}
+
 
 ## Configure one compilation
 
