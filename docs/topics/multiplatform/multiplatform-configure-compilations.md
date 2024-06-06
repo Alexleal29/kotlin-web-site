@@ -24,6 +24,11 @@ available for all or specific targets.
 
 ## Configure all compilations
 
+This example configures a compiler option that is common across all targets:
+
+<tabs group="build-script">
+<tab title="Kotlin" group-key="kotlin">
+
 ```kotlin
 kotlin {
     targets.all {
@@ -36,19 +41,55 @@ kotlin {
 }
 ```
 
+</tab>
+<tab title="Groovy" group-key="groovy">
+
+```groovy
+kotlin {
+    targets.all {
+        compilations.all {
+            compilerOptions.configure {
+                allWarningsAsError.set(true)
+            }
+        }
+    }
+}
+```
+
+</tab>
+</tabs>
+
 Alternatively, you can use the `compilerOptions` [top-level block](multiplatform-dsl-reference.md#top-level-blocks):
+
+<tabs group="build-script">
+<tab title="Kotlin" group-key="kotlin">
 
 ```kotlin
 kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         allWarningsAsErrors.set(true)
     }
 }
 ```
 
-> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained).
-> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
-> in [YouTrack](https://kotl.in/issue).
+</tab>
+<tab title="Groovy" group-key="groovy">
+
+```groovy
+kotlin {
+    compilerOptions {
+        allWarningsAsError.set(true)
+    }
+}
+```
+
+</tab>
+</tabs>
+
+> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained)
+> and requires opt-in. It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate
+> your feedback on it in [YouTrack](https://kotl.in/issue).
 >
 {type="warning"}
 
@@ -91,6 +132,7 @@ Alternatively, you can use the `compilerOptions` block at target level:
 ```kotlin
 kotlin {
     jvm {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }

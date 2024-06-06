@@ -125,18 +125,18 @@ Each target can have one or more [compilations](#compilations).
 
 In any target block, you can use the following declarations:
 
-| **Name**            | **Description**                                                                                                                                                                                      | 
-|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `attributes`        | Attributes used for [disambiguating targets](multiplatform-set-up-targets.md#distinguish-several-targets-for-one-platform) for a single platform.                                                    |
-| `preset`            | The preset that the target has been created from, if any.                                                                                                                                            |
-| `platformType`      | Designates the Kotlin platform of this target. Available values: `jvm`, `androidJvm`, `js`, `native`, `common`.                                                                                      |
-| `artifactsTaskName` | The name of the task that builds the resulting artifacts of this target.                                                                                                                             |
-| `components`        | The components used to setup Gradle publications.                                                                                                                                                    |
-| `compilerOptions`   | The [compiler options](gradle-compiler-options.md) used for the target. This declaration overrides any `compilerOptions` configured at [top level](multiplatform-dsl-reference.md#top-level-blocks). |
+| **Name**            | **Description**                                                                                                                                                                                                                                                                              | 
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `attributes`        | Attributes used for [disambiguating targets](multiplatform-set-up-targets.md#distinguish-several-targets-for-one-platform) for a single platform.                                                                                                                                            |
+| `preset`            | The preset that the target has been created from, if any.                                                                                                                                                                                                                                    |
+| `platformType`      | Designates the Kotlin platform of this target. Available values: `jvm`, `androidJvm`, `js`, `native`, `common`.                                                                                                                                                                              |
+| `artifactsTaskName` | The name of the task that builds the resulting artifacts of this target.                                                                                                                                                                                                                     |
+| `components`        | The components used to setup Gradle publications.                                                                                                                                                                                                                                            |
+| `compilerOptions`   | The [compiler options](gradle-compiler-options.md) used for the target. This declaration overrides any `compilerOptions` configured at [top level](multiplatform-dsl-reference.md#top-level-blocks). To use it, add the following opt-in: `@OptIn(ExperimentalKotlinGradlePluginApi::class)` |
 
-> The support for `compilerOptions` as a common target configuration is [Experimental](components-stability.md#stability-levels-explained).
-> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
-> in [YouTrack](https://kotl.in/issue).
+> The support for `compilerOptions` as a common target configuration is [Experimental](components-stability.md#stability-levels-explained)
+> and requires opt-in. It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate
+> your feedback on it in [YouTrack](https://kotl.in/issue).
 >
 {type="warning"}
 
@@ -730,18 +730,8 @@ kotlin {
             }
         }
     }
-    //Alternatively:
-    //compilerOptions {
-        //allWarningsAsErrors.set(true)
-    //}
 }
 ```
-
-> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained).
-> It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate your feedback on it
-> in [YouTrack](https://kotl.in/issue).
->
-{type="warning"}
 
 </tab>
 <tab title="Groovy" group-key="groovy">
@@ -772,6 +762,68 @@ kotlin {
 
 </tab>
 </tabs>
+
+Alternatively, to configure compiler options that are common for all targets, you can use the `compilerOptions` [top-level block](multiplatform-dsl-reference.md#top-level-blocks):
+
+<tabs group="build-script">
+<tab title="Kotlin" group-key="kotlin">
+
+```kotlin
+kotlin {
+    jvm {
+        val main by compilations.getting {
+            compilerOptions.configure { 
+                // Set up the Kotlin compiler options for the 'main' compilation:
+                jvmTarget.set(JvmTarget.JVM_1_8)
+            }
+        
+            compileKotlinTask // get the Kotlin task 'compileKotlinJvm' 
+            output // get the main compilation output
+        }
+        
+        compilations["test"].runtimeDependencyFiles // get the test runtime classpath
+    }
+
+    // Configure all compilations of all targets:
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
+}
+```
+
+</tab>
+<tab title="Groovy" group-key="groovy">
+
+```groovy
+kotlin {
+    jvm {
+        compilations.main.compilerOptions.configure {
+            // Setup the Kotlin compiler options for the 'main' compilation:
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
+
+        compilations.main.compileKotlinTask // get the Kotlin task 'compileKotlinJvm' 
+        compilations.main.output // get the main compilation output
+        compilations.test.runtimeDependencyFiles // get the test runtime classpath
+    }
+
+    // Configure all compilations of all targets:
+    compilerOptions {
+        allWarningsAsError.set(true)
+    }
+}
+```
+
+</tab>
+</tabs>
+
+> The support for `compilerOptions` as a top-level block is [Experimental](components-stability.md#stability-levels-explained)
+> and requires opt-in. It may be dropped or changed at any time. Use it only for evaluation purposes. We would appreciate
+> your feedback on it in [YouTrack](https://kotl.in/issue).
+>
+{type="warning"}
+
 
 ## Dependencies
 
